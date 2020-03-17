@@ -925,3 +925,7 @@ func (g *Geometry) binaryFloat(name string, cfn binaryFloatGetter, other *Geomet
 func (g *Geometry) simplify(name string, cfn func(*C.GEOSGeometry, C.double) *C.GEOSGeometry, d float64) (*Geometry, error) {
 	return geomFromC(name, cfn(g.g, C.double(d)))
 }
+
+func (g *Geometry) IsValid() (bool, error) {
+	return boolFromC("IsValid", cGEOSisValid(g.g))
+}

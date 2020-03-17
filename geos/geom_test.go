@@ -516,7 +516,7 @@ func TestBinaryTopo(t *testing.T) {
 		g2 := Must(FromWKT(test.g2))
 		expected := Must(FromWKT(test.out))
 		if actual := Must(test.method(g1, g2)); !mustEqual(expected.Equals(actual)) {
-			t.Errorf("%+V(): want %v got %v", test.method, expected, actual)
+			t.Errorf("Binary Topo: want %v got %v", expected, actual)
 		}
 	}
 }
@@ -611,7 +611,7 @@ func TestUnaryTopo(t *testing.T) {
 		g1 := Must(FromWKT(test.g1))
 		expected := Must(FromWKT(test.out))
 		if actual := Must(test.method(g1)); !mustEqual(actual.EqualsExact(expected, 0.0)) {
-			t.Errorf("%+V(): want %v got %v", test.method, expected, actual)
+			t.Errorf("Unary Topo: want %v got %v", expected, actual)
 		}
 	}
 }
@@ -640,7 +640,7 @@ func TestSimplifyMethods(t *testing.T) {
 		g1 := Must(FromWKT(test.g1))
 		expected := Must(FromWKT(test.out))
 		if actual := Must(test.method(g1, test.tol)); !mustEqual(actual.EqualsExact(expected, 0.0)) {
-			t.Errorf("%+V(): want %v got %v", test.method, expected, actual)
+            t.Errorf("SimplifyMethods: want %v got %v", expected, actual)
 		}
 	}
 }
@@ -783,7 +783,7 @@ func TestBinaryPred(t *testing.T) {
 		g1 := Must(FromWKT(test.g1))
 		g2 := Must(FromWKT(test.g2))
 		if actual := mustBool(test.method(g1, g2)); actual != test.pred {
-			t.Errorf("%+V(): want %v got %v", test.method, test.pred, actual)
+			t.Errorf("BinaryPred: want %v got %v", test.pred, actual)
 		}
 	}
 }
@@ -1003,7 +1003,7 @@ func TestWKB(t *testing.T) {
 			t.Fatalf("#%d %v", i, err)
 		}
 		if !bytes.Equal(wkb, test.wkb) {
-			t.Errorf("#%d want %v got %v", test.wkb, wkb)
+			t.Errorf("TestWKB: want %v got %v", test.wkb, wkb)
 		}
 	}
 }
@@ -1016,7 +1016,7 @@ func TestHex(t *testing.T) {
 			t.Fatalf("#%d %v", i, err)
 		}
 		if !bytes.Equal(hex, test.wkb) {
-			t.Errorf("#%d want %v got %v", string(test.wkb), string(hex))
+			t.Errorf("TextHex: want %v got %v", string(test.wkb), string(hex))
 		}
 	}
 }
@@ -1061,5 +1061,17 @@ func TestLineInterpolatePoint(t *testing.T) {
 		if !mustEqual(actual.Equals(expected)) {
 			t.Errorf("#%d want %v got %v", i, test.pt, actual.String())
 		}
+	}
+}
+
+func TestIsValid(t *testing.T) {
+	validGeom := Must(FromWKT("POINT(10 10)"))
+	result, err := validGeom.IsValid()
+	if err != nil {
+		t.Fatalf("must not return error %s", err)
+	}
+
+	if !result {
+		t.Fatalf("Geometry must be valid")
 	}
 }
